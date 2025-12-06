@@ -1,10 +1,20 @@
 import { GoogleGenAI } from "@google/genai";
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
+// Safely access process.env.API_KEY without crashing if process is undefined
+const getApiKey = () => {
+  try {
+    return process.env.API_KEY || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+const apiKey = getApiKey();
+const ai = new GoogleGenAI({ apiKey });
 
 export const askAiTutor = async (question: string, subject: string): Promise<string> => {
-  if (!process.env.API_KEY) {
-    return "API Key missing. Please configure the environment.";
+  if (!apiKey) {
+    return "API Key missing. Please configure the environment variables in Vercel.";
   }
 
   try {
