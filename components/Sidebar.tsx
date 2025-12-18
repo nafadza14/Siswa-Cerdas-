@@ -1,6 +1,11 @@
+
 import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Users, BookOpen, Calendar, Settings, LogOut, CheckSquare, ShieldCheck, Database, RefreshCw, PenTool, Camera, CreditCard } from 'lucide-react';
+import { 
+  LayoutDashboard, Users, BookOpen, Calendar, Settings, LogOut, 
+  CheckSquare, ShieldCheck, Database, PenTool, Camera, CreditCard,
+  Megaphone, GraduationCap, Trophy, FileText, UserPlus, Building
+} from 'lucide-react';
 import { UserRole } from '../types';
 
 interface SidebarProps {
@@ -12,8 +17,12 @@ interface SidebarProps {
 const Sidebar: React.FC<SidebarProps> = ({ role, isOpen, toggleSidebar }) => {
   const navigate = useNavigate();
   
-  const commonLinks = [
+  const studentLinks = [
     { to: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { to: '/dashboard/student-attendance', icon: Camera, label: 'Absensi (Scan)' },
+    { to: '/dashboard/schedule', icon: Calendar, label: 'Jadwal Pelajaran' },
+    { to: '/dashboard/cbt', icon: BookOpen, label: 'Ujian Online' },
+    { to: '/cards', icon: CreditCard, label: 'Kartu Siswa' },
   ];
 
   const teacherLinks = [
@@ -23,66 +32,60 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen, toggleSidebar }) => {
     { to: '/dashboard/blog', icon: PenTool, label: 'Blog Manager' },
   ];
 
-  const studentLinks = [
-    { to: '/dashboard/student-attendance', icon: Camera, label: 'Absensi (Scan)' }, // New
-    { to: '/dashboard/schedule', icon: Calendar, label: 'Jadwal Pelajaran' },
-    { to: '/dashboard/cbt', icon: BookOpen, label: 'Ujian Online' },
-    { to: '/cards', icon: CreditCard, label: 'Kartu Siswa' },
+  const schoolAdminLinks = [
+    { to: '/dashboard/school', icon: LayoutDashboard, label: 'School Overview' },
+    { to: '/dashboard/profile', icon: Building, label: 'Profil Sekolah' },
+    { to: '/dashboard/master-data', icon: Database, label: 'Master Data' },
+    { to: '/dashboard/schedule-manage', icon: Calendar, label: 'Manajemen Jadwal' },
+    { to: '/dashboard/broadcast', icon: Megaphone, label: 'Broadcast Info' },
+    { to: '/dashboard/achievements', icon: Trophy, label: 'Prestasi Siswa' },
+    { to: '/dashboard/tracer-study', icon: GraduationCap, label: 'Tracer Study' },
+    { to: '/dashboard/card-management', icon: CreditCard, label: 'Kartu Siswa' },
+    { to: '/dashboard/blog', icon: PenTool, label: 'Edit Blog Sekolah' },
   ];
 
-  const adminLinks = [
-    { to: '/dashboard/architecture', icon: Database, label: 'System Architecture' },
-    { to: '/dashboard/blog', icon: PenTool, label: 'Blog Manager' },
+  const superAdminLinks = [
+    { to: '/dashboard/admin', icon: LayoutDashboard, label: 'Platform Stats' },
+    { to: '/dashboard/schools', icon: Building, label: 'Manage Schools' },
+    { to: '/dashboard/approval-center', icon: CreditCard, label: 'Card Approval' },
+    { to: '/dashboard/architecture', icon: Database, label: 'Architecture' },
   ];
 
   const getLinks = () => {
-    let links = [...commonLinks];
-    if (role === UserRole.TEACHER) links = [...links, ...teacherLinks];
-    if (role === UserRole.STUDENT) links = [...links, ...studentLinks];
-    if (role === UserRole.SUPER_ADMIN) links = [...links, ...adminLinks];
-    return links;
+    if (role === UserRole.STUDENT) return studentLinks;
+    if (role === UserRole.TEACHER) return teacherLinks;
+    if (role === UserRole.SCHOOL_ADMIN) return schoolAdminLinks;
+    if (role === UserRole.SUPER_ADMIN) return superAdminLinks;
+    return [];
   };
 
   const handleRoleSwitch = (newRole: UserRole) => {
-    // Navigate to appropriate landing page for the role
-    if (newRole === UserRole.TEACHER) navigate('/dashboard/attendance');
-    else if (newRole === UserRole.SUPER_ADMIN) navigate('/dashboard/architecture');
+    if (newRole === UserRole.SCHOOL_ADMIN) navigate('/dashboard/school');
+    else if (newRole === UserRole.TEACHER) navigate('/dashboard/attendance');
+    else if (newRole === UserRole.SUPER_ADMIN) navigate('/dashboard/admin');
     else navigate('/dashboard');
+    toggleSidebar();
   };
 
   return (
     <>
-      {/* Mobile Overlay */}
-      <div 
-        className={`fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity duration-300 ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={toggleSidebar}
-      />
-
-      {/* Sidebar Container */}
-      <aside 
-        className={`fixed top-0 left-0 z-30 h-screen w-64 bg-white border-r border-gray-200 transition-transform duration-300 transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 flex flex-col`}
-      >
-        <div className="h-20 flex flex-shrink-0 items-center px-8 border-b border-gray-100">
-           <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mr-2">
-              <span className="text-white font-bold text-xl">S</span>
-            </div>
-            <span className="font-bold text-xl text-dark">Siswa<span className="text-primary">Cerdas</span></span>
+      <div className={`fixed inset-0 bg-black/50 z-20 md:hidden transition-opacity ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`} onClick={toggleSidebar} />
+      <aside className={`fixed top-0 left-0 z-30 h-screen w-64 bg-white border-r border-gray-200 transition-transform ${isOpen ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0 flex flex-col`}>
+        <div className="h-20 flex items-center px-8 border-b border-gray-100">
+          <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center mr-2">
+            <span className="text-white font-bold text-xl">S</span>
+          </div>
+          <span className="font-bold text-xl text-dark">Siswa<span className="text-primary">Cerdas</span></span>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-4 space-y-2">
-          <p className="px-4 text-xs font-semibold text-gray-400 uppercase tracking-wider mb-2">Menu ({role})</p>
+        <div className="flex-1 overflow-y-auto p-4 space-y-1">
           {getLinks().map((link) => (
             <NavLink
               key={link.to}
               to={link.to}
-              end={link.to === '/dashboard'}
-              className={({ isActive }) =>
-                `flex items-center px-4 py-3 rounded-xl transition-all duration-200 group ${
-                  isActive 
-                    ? 'bg-primary/10 text-primary font-semibold' 
-                    : 'text-gray-500 hover:bg-gray-50 hover:text-dark'
-                }`
-              }
+              end={link.to === '/dashboard' || link.to === '/dashboard/school' || link.to === '/dashboard/admin'}
+              className={({ isActive }) => `flex items-center px-4 py-3 rounded-xl transition-all ${isActive ? 'bg-primary/10 text-primary font-semibold' : 'text-gray-500 hover:bg-gray-50 hover:text-dark'}`}
+              onClick={() => { if (window.innerWidth < 768) toggleSidebar(); }}
             >
               <link.icon className="w-5 h-5 mr-3" />
               {link.label}
@@ -90,24 +93,19 @@ const Sidebar: React.FC<SidebarProps> = ({ role, isOpen, toggleSidebar }) => {
           ))}
         </div>
 
-        {/* Demo Role Switcher - For Preview Purposes */}
         <div className="p-4 border-t border-gray-100 bg-gray-50/50">
-          <p className="text-xs font-semibold text-gray-400 uppercase mb-2">Demo: Switch Role</p>
-          <div className="flex flex-col gap-2">
-             <button onClick={() => handleRoleSwitch(UserRole.STUDENT)} className="text-xs flex items-center text-gray-600 hover:text-primary">
-                <Users size={14} className="mr-2"/> View as Student
-             </button>
-             <button onClick={() => handleRoleSwitch(UserRole.TEACHER)} className="text-xs flex items-center text-gray-600 hover:text-primary">
-                <CheckSquare size={14} className="mr-2"/> View as Teacher
-             </button>
-             <button onClick={() => handleRoleSwitch(UserRole.SUPER_ADMIN)} className="text-xs flex items-center text-gray-600 hover:text-primary">
-                <Database size={14} className="mr-2"/> View as Admin
-             </button>
+          <p className="text-[10px] font-bold text-gray-400 uppercase mb-2 px-4">Switcher (Demo)</p>
+          <div className="grid grid-cols-2 gap-1 px-2">
+             {[UserRole.STUDENT, UserRole.TEACHER, UserRole.SCHOOL_ADMIN, UserRole.SUPER_ADMIN].map(r => (
+               <button key={r} onClick={() => handleRoleSwitch(r)} className="text-[9px] py-1 px-2 bg-white border border-gray-200 rounded-md hover:border-primary truncate">
+                 {r.split('_')[0]}
+               </button>
+             ))}
           </div>
         </div>
 
         <div className="p-4 border-t border-gray-100">
-          <button onClick={() => navigate('/')} className="flex items-center px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl w-full transition-colors">
+          <button onClick={() => navigate('/')} className="flex items-center px-4 py-3 text-red-500 hover:bg-red-50 rounded-xl w-full">
             <LogOut className="w-5 h-5 mr-3" />
             Logout
           </button>

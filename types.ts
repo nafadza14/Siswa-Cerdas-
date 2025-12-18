@@ -1,3 +1,4 @@
+
 export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
   SCHOOL_ADMIN = 'SCHOOL_ADMIN',
@@ -12,19 +13,64 @@ export interface User {
   role: UserRole;
   avatar: string;
   email: string;
+  phone?: string;
+}
+
+export interface ClassGroup {
+  id: string;
+  name: string;
+  gradeLevel: number; // 10, 11, 12
+  major: 'IPA' | 'IPS' | 'Umum' | 'Bahasa';
+  homeroomTeacher: string;
+  studentCount: number;
+}
+
+export interface SchoolProfile {
+  id: string;
+  name: string;
+  npsn: string;
+  address: string;
+  email: string;
+  phone: string;
+  logo: string;
+  principal: string;
+  accreditation: string;
+  studentCount: number;
+  teacherCount: number;
+  classCount: number;
+  status: 'ACTIVE' | 'PENDING' | 'SUSPENDED';
+  classes: ClassGroup[];
+  documents: {
+    skOperasional?: string;
+    skAkreditasi?: string;
+    logoHighRes?: string;
+  };
+}
+
+export interface CardApplication {
+  id: string;
+  schoolId: string;
+  schoolName: string;
+  requestDate: string;
+  studentCount: number;
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED';
+  batchName: string;
+  classId?: string;
 }
 
 export interface Student extends User {
   role: UserRole.STUDENT;
   classId: string;
   nisn: string;
-  parentPhone: string; // For WhatsApp notifications
+  parentPhone: string;
+  achievements?: Achievement[];
+  cardStatus?: 'PENDING' | 'APPROVED' | 'PRINTED';
 }
 
-export interface ClassGroup {
-  id: string;
-  name: string; // e.g., "10 IPA 1"
-  gradeLevel: number;
+export interface Teacher extends User {
+  role: UserRole.TEACHER;
+  nip: string;
+  subjects: string[];
 }
 
 export enum AttendanceStatus {
@@ -34,12 +80,40 @@ export enum AttendanceStatus {
   SICK = 'SICK',
 }
 
-export interface AttendanceRecord {
+export interface Achievement {
   id: string;
   studentId: string;
+  title: string;
   date: string;
-  status: AttendanceStatus;
-  timestamp: string;
+  category: 'Akademik' | 'Non-Akademik' | 'Sains' | 'Olahraga' | 'Seni';
+  rank: string;
+}
+
+export interface Alumni {
+  id: string;
+  name: string;
+  graduationYear: number;
+  status: 'Kuliah' | 'Kerja' | 'Wirausaha' | 'Lainnya';
+  institution: string;
+}
+
+export interface BroadcastMessage {
+  id: string;
+  title: string;
+  content: string;
+  sentDate: string;
+  target: 'ALL' | 'TEACHERS' | 'STUDENTS';
+}
+
+export interface BlogPost {
+  id: string;
+  title: string;
+  excerpt: string;
+  content: string;
+  date: string;
+  author: string;
+  category: string;
+  imageUrl: string;
 }
 
 export interface Exam {
@@ -55,23 +129,4 @@ export interface ExamQuestion {
   text: string;
   options: string[];
   correctOptionIndex: number;
-}
-
-export interface Announcement {
-  id: string;
-  title: string;
-  content: string;
-  date: string;
-  type: 'urgent' | 'info' | 'event';
-}
-
-export interface BlogPost {
-  id: string;
-  title: string;
-  excerpt: string;
-  content: string;
-  author: string;
-  date: string;
-  imageUrl: string;
-  category: string;
 }

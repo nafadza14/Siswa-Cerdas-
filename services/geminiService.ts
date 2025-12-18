@@ -1,25 +1,18 @@
+
 import { GoogleGenAI } from "@google/genai";
 
-// Safely access process.env.API_KEY without crashing if process is undefined
-const getApiKey = () => {
-  try {
-    return process.env.API_KEY || '';
-  } catch (e) {
-    return '';
-  }
-};
-
-const apiKey = getApiKey();
-const ai = new GoogleGenAI({ apiKey });
+// Fixed: Correctly initialize GoogleGenAI as per guidelines
+const ai = new GoogleGenAI({ apiKey: process.env.API_KEY || '' });
 
 export const askAiTutor = async (question: string, subject: string): Promise<string> => {
-  if (!apiKey) {
+  if (!process.env.API_KEY) {
     return "API Key missing. Please configure the environment variables in Vercel.";
   }
 
   try {
+    // Fixed: Using gemini-3-flash-preview and accessing .text correctly
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: 'gemini-3-flash-preview',
       contents: `You are a helpful and encouraging school tutor for Indonesian students. 
       The student is asking about the subject: ${subject}.
       Question: ${question}

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
 import { MOCK_BLOG_POSTS } from '../constants';
@@ -51,7 +52,8 @@ const BlogPublic: React.FC = () => {
               </div>
               
               <div className="flex gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 hide-scrollbar">
-                {categories.map(cat => (
+                {/* Fixed: Added explicit type to cat to fix 'unknown' errors */}
+                {categories.map((cat: string) => (
                   <button
                     key={cat}
                     onClick={() => setSelectedCategory(cat)}

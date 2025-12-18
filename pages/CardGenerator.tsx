@@ -1,247 +1,166 @@
 
 import React, { useState } from 'react';
 import Navbar from '../components/Navbar';
-import { MOCK_STUDENTS } from '../constants';
-import { CreditCard, CheckCircle2, Send } from 'lucide-react';
+import { MOCK_STUDENTS, MOCK_SCHOOL_DATA } from '../constants';
+import { CreditCard, Eye, ShieldCheck, Printer } from 'lucide-react';
 
 const CardGenerator: React.FC = () => {
-  const [selectedStudent, setSelectedStudent] = useState(MOCK_STUDENTS[0]);
-  const [selectedDesign, setSelectedDesign] = useState(0);
-  const [orderSent, setOrderSent] = useState(false);
-  const [previewOpacity, setPreviewOpacity] = useState(1);
+  const [side, setSide] = useState<'front' | 'back'>('front');
+  const student = MOCK_STUDENTS[0];
+  const school = MOCK_SCHOOL_DATA;
 
-  // Standard QR Code Component (Simpler & Cleaner)
-  const StandardQRCode = () => (
-    <div className="w-full h-full relative">
-       {/* Finder Patterns */}
-       <div className="absolute top-0 left-0 w-[35%] h-[35%] border-[2.5px] border-black flex items-center justify-center">
-          <div className="w-[60%] h-[60%] bg-black"></div>
-       </div>
-       <div className="absolute top-0 right-0 w-[35%] h-[35%] border-[2.5px] border-black flex items-center justify-center">
-          <div className="w-[60%] h-[60%] bg-black"></div>
-       </div>
-       <div className="absolute bottom-0 left-0 w-[35%] h-[35%] border-[2.5px] border-black flex items-center justify-center">
-          <div className="w-[60%] h-[60%] bg-black"></div>
+  const FrontCard = () => (
+    <div className="w-full h-full bg-gradient-to-br from-blue-700 to-indigo-900 text-white p-6 relative overflow-hidden flex flex-col">
+       {/* Background Shapes */}
+       <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -mr-16 -mt-16 blur-xl"></div>
+       <div className="absolute bottom-0 left-0 w-24 h-24 bg-blue-400/20 rounded-full -ml-12 -mb-12 blur-xl"></div>
+       
+       {/* Header */}
+       <div className="flex items-center gap-3 border-b border-white/20 pb-4 mb-4 z-10">
+          <img src={school.logo} className="w-10 h-10 object-contain bg-white rounded-lg p-1 shadow-sm" />
+          <div className="min-w-0">
+             <h2 className="font-extrabold text-[12px] uppercase leading-tight">{school.name}</h2>
+             <p className="text-[8px] opacity-80 uppercase tracking-widest">NPSN: {school.npsn}</p>
+             <p className="text-[6px] opacity-70 leading-tight line-clamp-1">{school.address}</p>
+          </div>
        </div>
 
-       {/* Simplified Data Area (Static for clean look) */}
-       <div className="absolute top-[42%] left-[42%] w-[12%] h-[12%] bg-black"></div>
-       <div className="absolute top-[42%] right-[10%] w-[12%] h-[12%] bg-black"></div>
-       <div className="absolute bottom-[10%] right-[42%] w-[12%] h-[12%] bg-black"></div>
-       <div className="absolute bottom-[10%] right-[10%] w-[20%] h-[20%] bg-black"></div>
-       <div className="absolute top-[10%] left-[42%] w-[12%] h-[12%] bg-black"></div>
+       {/* Content */}
+       <div className="flex-1 flex gap-4 items-center z-10">
+          <div className="w-1/3 aspect-[3/4] border-2 border-white/50 rounded-lg overflow-hidden shadow-xl shrink-0">
+             <img src={student.avatar} className="w-full h-full object-cover" />
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center">
+             <p className="text-[8px] text-blue-200 uppercase font-bold tracking-wider mb-1">Kartu Tanda Siswa</p>
+             <h3 className="text-lg font-black uppercase leading-none mb-1 truncate">{student.name}</h3>
+             <p className="text-xs font-mono opacity-90 mb-2">{student.nisn}</p>
+             
+             <div className="mt-2">
+                <p className="text-[6px] opacity-60 uppercase">Berlaku S/D</p>
+                <p className="text-[8px] font-bold">2026</p>
+             </div>
+          </div>
+       </div>
+
+       {/* Footer */}
+       <div className="mt-4 flex justify-between items-end z-10">
+          <div className="w-10 h-10 bg-white p-1 rounded-sm shrink-0 flex items-center justify-center">
+             <div className="grid grid-cols-2 grid-rows-2 gap-[1px] w-full h-full bg-black p-[2px]">
+                <div className="bg-white"></div><div className="bg-white"></div>
+                <div className="bg-white"></div><div className="bg-black"></div>
+             </div> {/* Simple Mock QR */}
+          </div>
+          <div className="text-right">
+             <p className="text-[6px] font-mono italic opacity-50 tracking-tighter">SiswaCerdas ID-Card System</p>
+          </div>
+       </div>
     </div>
   );
 
-  // Component that renders the card based on index
-  const CardTemplate = ({ index, student }: { index: number, student: typeof selectedStudent }) => {
-    // Styles for 18 variants
-    const getStyle = (i: number) => {
-      const styles = [
-        // 1-6: Gradients & Clean
-        "bg-gradient-to-r from-blue-600 to-cyan-500 text-white",
-        "bg-gradient-to-br from-indigo-700 to-purple-700 text-white",
-        "bg-gradient-to-tr from-emerald-600 to-teal-500 text-white",
-        "bg-gradient-to-r from-orange-500 to-pink-600 text-white",
-        "bg-gray-900 text-white",
-        "bg-gradient-to-r from-blue-800 to-indigo-900 text-white",
-        // 7-12: Light & Patterned
-        "bg-white border border-gray-200 text-dark",
-        "bg-orange-50 border border-orange-200 text-dark",
-        "bg-blue-50 border border-blue-200 text-dark",
-        "bg-[#fffcf8] border border-gray-200 text-dark",
-        "bg-gradient-to-br from-gray-100 to-gray-200 text-dark border border-gray-300",
-        "bg-white border-l-8 border-primary text-dark",
-        // 13-18: Modern & Corporate
-        "bg-slate-800 border-b-8 border-secondary text-white",
-        "bg-teal-700 border-r-8 border-yellow-400 text-white",
-        "bg-white border-2 border-dashed border-gray-300 text-dark",
-        "bg-gradient-to-r from-slate-900 to-black text-white border border-gray-700",
-        "bg-indigo-600 text-white",
-        "bg-gradient-to-tr from-yellow-500 to-orange-600 text-white"
-      ];
-      return styles[i % styles.length];
-    };
-
-    const SCHOOL_NAME = "SMA Xaverius Bandar Lampung";
-    const containerClasses = `w-full h-full p-[6%] relative flex flex-col overflow-hidden shadow-sm ${getStyle(index)}`;
-
-    // UNIFIED LAYOUT for all models
-    // Layout: Header Top, Content Vertically Centered
-    return (
-      <div className={containerClasses}>
-          {/* Header */}
-          <div className="flex justify-between items-start z-10 mb-2">
-             <div className="flex items-center gap-1.5">
-               <div className="w-4 h-4 bg-white/20 backdrop-blur-md rounded flex items-center justify-center font-bold text-[6px]">S</div>
-               <span className="font-bold text-[7px] uppercase tracking-wider">{SCHOOL_NAME}</span>
+  const BackCard = () => (
+    <div className="w-full h-full bg-white text-dark p-6 relative flex flex-col border-2 border-gray-100 shadow-inner">
+       <div className="bg-gray-900 text-white p-3 -mx-6 -mt-6 mb-6">
+          <h4 className="text-[10px] font-bold text-center uppercase tracking-widest">Tata Tertib & Penggunaan</h4>
+       </div>
+       
+       <div className="flex-1 flex gap-4">
+          <div className="flex-1 space-y-3">
+             {[
+               'Kartu ini adalah milik sah Sekolah & Siswa yang bersangkutan.',
+               'Wajib dibawa selama berada di lingkungan sekolah.',
+               'Digunakan untuk akses Presensi, Perpustakaan, dan Ujian.',
+               'Jika ditemukan, mohon kembalikan ke alamat sekolah.',
+             ].map((text, i) => (
+               <div key={i} className="flex gap-2 items-start">
+                  <span className="text-[8px] font-bold text-primary">{i+1}.</span>
+                  <p className="text-[8px] text-gray-500 leading-tight">{text}</p>
+               </div>
+             ))}
+          </div>
+          
+          {/* Side QR Code Replacement for Barcode */}
+          <div className="w-16 h-16 bg-white border border-gray-200 rounded-xl p-2 shrink-0 self-start shadow-sm flex flex-col items-center justify-center">
+             <div className="w-full h-full bg-black p-[2px] grid grid-cols-5 grid-rows-5 gap-[1px]">
+                {/* Simulated QR Finder Patterns and Data */}
+                <div className="bg-white"></div><div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div><div className="bg-white"></div>
+                <div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div>
+                <div className="bg-black"></div><div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div><div className="bg-black"></div>
+                <div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div>
+                <div className="bg-white"></div><div className="bg-white"></div><div className="bg-black"></div><div className="bg-white"></div><div className="bg-white"></div>
              </div>
-             <span className="text-[5px] font-mono opacity-60 border border-current px-1 rounded">KTS</span>
+             <p className="text-[5px] font-mono mt-1 text-gray-400 uppercase tracking-tighter">Scan to Verify</p>
           </div>
+       </div>
 
-          {/* Main Content - Centered in remaining space */}
-          <div className="flex-1 flex items-center z-10 relative">
-              <div className="w-full flex items-center gap-3">
-                 {/* Photo (Left) */}
-                 <div className="w-[28%] aspect-[3/4] rounded-sm bg-gray-200 overflow-hidden shadow-sm shrink-0 border-[1.5px] border-white/40">
-                    <img src={student.avatar} className="w-full h-full object-cover" alt="Student" referrerPolicy="no-referrer" />
-                 </div>
-
-                 {/* Identity Info (Middle) */}
-                 <div className="flex-1 min-w-0 flex flex-col justify-center">
-                     <h3 className="font-bold text-[10px] leading-tight truncate mb-0.5">{student.name}</h3>
-                     <p className="text-[7px] opacity-80 font-mono mb-1">{student.nisn}</p>
-                     <div className="h-[0.5px] w-full bg-current opacity-30 my-1"></div>
-                     <p className="text-[6px] font-bold">KELAS 10 IPA 1</p>
-                     <p className="text-[5px] opacity-70">VALID THRU: 2026</p>
-                 </div>
-
-                 {/* QR Code (Right) */}
-                 <div className="w-[22%] aspect-square bg-white p-1.5 rounded-sm shadow-sm shrink-0">
-                    <StandardQRCode />
-                 </div>
-              </div>
+       <div className="mt-6 flex justify-between items-center border-t border-gray-100 pt-6">
+          <div className="text-center w-1/2">
+             <p className="text-[6px] text-gray-400 mb-4 uppercase tracking-tighter">Pemegang Kartu</p>
+             <div className="h-[0.5px] w-16 mx-auto bg-gray-200"></div>
+             <p className="text-[7px] font-bold mt-1 uppercase truncate px-2">{student.name}</p>
           </div>
+          <div className="text-center w-1/2">
+             <p className="text-[6px] text-gray-400 mb-4 uppercase tracking-tighter">Kepala Sekolah</p>
+             <div className="h-[0.5px] w-16 mx-auto bg-gray-200"></div>
+             <p className="text-[7px] font-bold mt-1 uppercase truncate px-2">{school.principal}</p>
+          </div>
+       </div>
 
-          {/* Decorative Background Elements based on index to keep variety */}
-          {index < 6 && (
-             <div className="absolute top-0 right-0 w-24 h-24 bg-white/10 rounded-full -mr-10 -mt-10 blur-xl pointer-events-none"></div>
-          )}
-          {index >= 12 && index < 15 && (
-             <div className="absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
-          )}
-      </div>
-    );
-  };
-
-  const handleDesignSelect = (index: number) => {
-    // Smooth transition effect
-    setPreviewOpacity(0.5);
-    setTimeout(() => {
-        setSelectedDesign(index);
-        setPreviewOpacity(1);
-    }, 150);
-  };
-
-  const handleRequestDesign = (e: React.FormEvent) => {
-    e.preventDefault();
-    setOrderSent(true);
-    setTimeout(() => {
-      alert("Permintaan desain berhasil dikirim ke Admin Sekolah!");
-      setOrderSent(false);
-    }, 2000);
-  };
+       <div className="mt-auto pt-4 flex justify-center">
+          <div className="flex gap-[1px] h-4 items-end">
+             {Array.from({length: 40}).map((_, i) => (
+                <div key={i} className={`bg-gray-200 ${i % 3 === 0 ? 'w-[1px] h-3' : 'w-[2px] h-4'} ${i % 5 === 0 ? 'bg-gray-400' : ''}`} />
+             ))}
+          </div>
+       </div>
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-[#f8fafc]">
+    <div className="min-h-screen bg-[#fffcf8]">
       <Navbar />
-      
-      <div className="max-w-7xl mx-auto px-4 py-12">
-        <div className="text-center mb-12">
-           <h1 className="text-3xl md:text-5xl font-extrabold text-dark mb-4">
-             Pilih Desain <span className="text-primary">Kartu Tanda Siswa</span>
-           </h1>
-           <p className="text-gray-500 max-w-2xl mx-auto">
-             18 Pilihan desain eksklusif standar ISO. Sekolah dapat memilih desain resmi untuk dicetak secara massal oleh Admin.
-           </p>
-        </div>
-
-        <div className="flex flex-col lg:flex-row gap-8 items-start">
-           {/* Left: Preview & Request Panel */}
-           <div className="w-full lg:w-1/3 sticky top-24">
-              <div className="bg-white p-6 rounded-3xl shadow-xl border border-gray-100">
-                 <div className="flex items-center justify-between mb-6">
-                    <h3 className="font-bold text-dark text-xl flex items-center gap-2">
-                      <CreditCard className="text-primary" /> Preview
-                    </h3>
-                    <span className="text-xs bg-gray-100 px-2 py-1 rounded text-gray-500 font-mono">Model #{selectedDesign + 1}</span>
+      <div className="max-w-7xl mx-auto px-4 py-16">
+        <div className="flex flex-col lg:flex-row gap-16 items-center">
+           <div className="flex-1 space-y-8">
+              <div className="inline-block px-4 py-1 bg-primary/10 text-primary rounded-full text-sm font-bold">KTS Modern v2.5</div>
+              <h1 className="text-4xl md:text-6xl font-black text-dark leading-tight">
+                Standar Kartu <br/> <span className="text-primary">Siswa Nasional</span>
+              </h1>
+              <p className="text-lg text-gray-500 max-w-xl leading-relaxed">
+                Template kartu yang terintegrasi dengan sistem Presensi QR dan Database Dapodik. Didesain untuk durabilitas dan fungsionalitas maksimal bagi sekolah modern.
+              </p>
+              
+              <div className="grid grid-cols-2 gap-4">
+                 <div className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div className="p-2 bg-green-50 rounded-lg"><ShieldCheck className="text-green-500" size={24} /></div>
+                    <div><p className="font-bold text-sm">Anti-Fake QR</p><p className="text-xs text-gray-400">Enkripsi Data Aman</p></div>
                  </div>
-                 
-                 {/* Main Preview Container - Enforcing Aspect Ratio */}
-                 <div className="bg-gray-200 p-6 rounded-xl mb-6 flex justify-center items-center shadow-inner relative overflow-hidden">
-                    <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:16px_16px]"></div>
-                    
-                    {/* The Card Itself - ID-1 Size Ratio */}
-                    <div 
-                        className="w-full max-w-[340px] aspect-[86/54] shadow-2xl rounded-xl overflow-hidden transform transition-all duration-300"
-                        style={{ opacity: previewOpacity, transition: 'opacity 0.2s ease-in-out' }}
-                    >
-                       <CardTemplate index={selectedDesign} student={selectedStudent} />
-                    </div>
+                 <div className="flex items-center gap-3 p-4 bg-white rounded-2xl shadow-sm border border-gray-100">
+                    <div className="p-2 bg-blue-50 rounded-lg"><Printer className="text-blue-500" size={24} /></div>
+                    <div><p className="font-bold text-sm">High Quality</p><p className="text-xs text-gray-400">300 DPI Thermal Print</p></div>
                  </div>
+              </div>
 
-                 {/* Request Form */}
-                 <form onSubmit={handleRequestDesign} className="space-y-4">
-                    <div>
-                      <label className="block text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Simulasi Data Siswa</label>
-                      <select 
-                        className="w-full p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-primary text-sm bg-gray-50"
-                        onChange={(e) => {
-                          const s = MOCK_STUDENTS.find(st => st.id === e.target.value);
-                          if (s) setSelectedStudent(s);
-                        }}
-                        value={selectedStudent.id}
-                      >
-                         {MOCK_STUDENTS.map(s => <option key={s.id} value={s.id}>{s.name} - {s.classId === 'c1' ? '10 IPA 1' : '10 IPS 2'}</option>)}
-                      </select>
-                    </div>
-
-                    <div className="pt-4 border-t border-gray-100">
-                      <h4 className="font-bold text-dark text-sm mb-3">Request Cetak (Sekolah)</h4>
-                      <p className="text-xs text-gray-500 mb-4">
-                        Pilih desain ini sebagai template resmi sekolah Anda. Admin akan memproses pencetakan massal.
-                      </p>
-                      
-                      <button 
-                        type="submit"
-                        disabled={orderSent}
-                        className="w-full bg-secondary text-white py-3 rounded-xl font-bold shadow-lg shadow-orange-100 hover:bg-orange-600 transition flex items-center justify-center gap-2 disabled:opacity-70"
-                      >
-                        {orderSent ? <CheckCircle2 /> : <Send size={18} />}
-                        {orderSent ? 'Terkirim' : 'Ajukan Desain ke Admin'}
-                      </button>
-                    </div>
-                 </form>
+              <div className="pt-4">
+                 <button className="bg-secondary text-white px-8 py-4 rounded-2xl font-bold shadow-xl shadow-orange-100 hover:scale-105 transition active:scale-95">
+                    Daftar Sekolah & Mulai Cetak
+                 </button>
               </div>
            </div>
 
-           {/* Right: Grid Selection */}
-           <div className="w-full lg:w-2/3">
-              <div className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100">
-                 <div className="flex justify-between items-center mb-6">
-                    <h3 className="font-bold text-dark text-lg">Katalog Desain (18 Model)</h3>
-                    <div className="flex gap-2">
-                       <span className="w-3 h-3 rounded-full bg-blue-500"></span>
-                       <span className="w-3 h-3 rounded-full bg-orange-500"></span>
-                       <span className="w-3 h-3 rounded-full bg-gray-800"></span>
-                    </div>
+           <div className="w-full max-w-[500px] space-y-6">
+              <div className="bg-white p-8 rounded-[40px] shadow-2xl border border-gray-100">
+                 <div className="flex gap-2 mb-8 bg-gray-100 p-1 rounded-2xl">
+                    <button onClick={() => setSide('front')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition ${side === 'front' ? 'bg-white text-primary shadow-sm' : 'text-gray-400 hover:text-dark'}`}>Tampak Depan</button>
+                    <button onClick={() => setSide('back')} className={`flex-1 py-3 rounded-xl font-bold text-sm transition ${side === 'back' ? 'bg-white text-primary shadow-sm' : 'text-gray-400 hover:text-dark'}`}>Tampak Belakang</button>
                  </div>
-                 
-                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                    {Array.from({ length: 18 }).map((_, idx) => (
-                      <button 
-                        key={idx}
-                        onClick={() => handleDesignSelect(idx)}
-                        className={`group relative rounded-xl transition-all duration-200 overflow-hidden text-left focus:outline-none ${
-                          selectedDesign === idx 
-                            ? 'ring-4 ring-primary ring-offset-2 shadow-xl scale-[1.02]' 
-                            : 'hover:ring-2 hover:ring-gray-200 hover:shadow-lg'
-                        }`}
-                      >
-                         <div className="aspect-[86/54] w-full">
-                            <CardTemplate index={idx} student={selectedStudent} />
-                         </div>
-                         
-                         {/* Overlay on hover/select */}
-                         <div className={`absolute inset-0 bg-black/0 group-hover:bg-black/5 transition-colors ${selectedDesign === idx ? 'bg-transparent' : ''}`} />
-                         
-                         {selectedDesign === idx && (
-                           <div className="absolute top-2 right-2 bg-primary text-white p-1 rounded-full shadow-sm z-10">
-                             <CheckCircle2 size={12} />
-                           </div>
-                         )}
-                      </button>
-                    ))}
+
+                 <div className="aspect-[86/54] w-full bg-gray-50 rounded-2xl overflow-hidden shadow-2xl relative group cursor-pointer border border-gray-200">
+                    {side === 'front' ? <FrontCard /> : <BackCard />}
+                 </div>
+
+                 <div className="mt-8 flex justify-between items-center text-xs text-gray-400">
+                    <span className="flex items-center gap-1 font-medium"><Eye size={12}/> Preview Mode</span>
+                    <span className="font-mono">CR80 • 86 x 54 mm</span>
                  </div>
               </div>
            </div>
