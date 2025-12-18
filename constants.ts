@@ -2,6 +2,7 @@
 import { UserRole, Student, ClassGroup, Achievement, Alumni, BlogPost, Exam, SchoolProfile, CardApplication } from './types';
 
 export const CARD_PHOTO_MAIN = "https://i.pinimg.com/736x/c2/ec/95/c2ec953ef952d591b2b8ae0d98f59e96.jpg";
+export const PREVIEW_LOGO = "https://i.pinimg.com/736x/e4/fc/df/e4fcdfa9937a726e285649eb54615769.jpg";
 
 const TEACHER_NAMES = [
   "Drs. Bambang Wijaya", "Siti Aminah, S.Pd", "Agus Setiawan, M.Pd", 
@@ -16,7 +17,6 @@ const generateClasses = (): ClassGroup[] => {
   
   grades.forEach(grade => {
     majors.forEach(major => {
-      // Create 3 parallel classes for each major/grade (e.g. 10 IPA 1, 10 IPA 2, etc)
       for (let i = 1; i <= 3; i++) {
         classes.push({
           id: `c-${grade}-${major.toLowerCase()}-${i}`,
@@ -24,7 +24,7 @@ const generateClasses = (): ClassGroup[] => {
           gradeLevel: grade,
           major: major,
           homeroomTeacher: TEACHER_NAMES[Math.floor(Math.random() * TEACHER_NAMES.length)],
-          studentCount: Math.floor(35 + Math.random() * 4) // 35-38 students
+          studentCount: Math.floor(35 + Math.random() * 4)
         });
       }
     });
@@ -43,9 +43,11 @@ const generateMockStudents = (classes: ClassGroup[]): Student[] => {
         name: i === 0 && cls.id === 'c-10-ipa-1' ? 'Clara Setiana Dewi' : `Siswa ${cls.name} ${i + 1}`,
         role: UserRole.STUDENT,
         avatar: i === 0 && cls.id === 'c-10-ipa-1' ? CARD_PHOTO_MAIN : `https://i.pravatar.cc/150?u=s-${cls.id}-${i}`,
-        email: `student${i}@xaverius.sch.id`,
+        email: `student${i}@cerdasmulia.sch.id`,
         classId: cls.id,
         nisn: `${cls.gradeLevel}${Math.floor(10000000 + Math.random() * 90000000)}`,
+        whatsapp: `628${Math.floor(100000000 + Math.random() * 899999999)}`,
+        parentWhatsapp: `628${Math.floor(100000000 + Math.random() * 899999999)}`,
         parentPhone: '628123456789',
         cardStatus: i < 15 ? 'PRINTED' : i < 25 ? 'APPROVED' : 'PENDING'
       });
@@ -58,13 +60,13 @@ export const MOCK_STUDENTS = generateMockStudents(MOCK_CLASSES);
 
 export const MOCK_SCHOOL_DATA: SchoolProfile = {
   id: 'sch-1',
-  name: 'SMA Xaverius Bandar Lampung',
+  name: 'SMA CERDAS MULIA Bandar Lampung',
   npsn: '10801234',
-  address: 'Jl. Cempaka No. 1, Bandar Lampung, Lampung 35111',
-  email: 'admin@xaverius.sch.id',
-  phone: '0721-123456',
-  logo: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSq_7N5rK5LOnmX2L7xYqYqL3x_fX-Q-1-yGg&s',
-  principal: 'Drs. H. Ahmad Santoso',
+  address: 'Jl. Pendidikan No. 88, Bandar Lampung, Lampung 35111',
+  email: 'info@cerdasmulia.sch.id',
+  phone: '0721-888999',
+  logo: PREVIEW_LOGO,
+  principal: 'Drs. H. Mulyadi, M.Pd.',
   accreditation: 'A',
   studentCount: MOCK_STUDENTS.length,
   teacherCount: 56,
@@ -74,7 +76,7 @@ export const MOCK_SCHOOL_DATA: SchoolProfile = {
   documents: {
     skOperasional: 'SK-OPER-2023-001.pdf',
     skAkreditasi: 'SK-AKRED-A-2022.pdf',
-    logoHighRes: 'logo_xaverius_hr.png'
+    logoHighRes: 'logo_hr.png'
   }
 };
 
@@ -103,26 +105,16 @@ export const MOCK_CARD_APPLICATIONS: CardApplication[] = [
   {
     id: 'app-1',
     schoolId: 'sch-1',
-    schoolName: 'SMA Xaverius Bandar Lampung',
+    schoolName: 'SMA CERDAS MULIA Bandar Lampung',
     requestDate: '2024-05-18',
     studentCount: 35,
     status: 'PENDING',
-    batchName: 'Kelas 10 IPA 1 - Ganjil'
-  },
-  {
-    id: 'app-2',
-    schoolId: 'sch-2',
-    schoolName: 'SMK Negeri 1 Surabaya',
-    requestDate: '2024-05-15',
-    studentCount: 120,
-    status: 'COMPLETED',
-    batchName: 'Siswa Baru Angkatan 2024'
+    batchName: 'Batch Ganjil 2024'
   }
 ];
 
 export const MOCK_ALUMNI: Alumni[] = [
   { id: 'al1', name: 'Andi Pratama', graduationYear: 2023, status: 'Kuliah', institution: 'Universitas Indonesia' },
-  { id: 'al2', name: 'Sinta Bella', graduationYear: 2023, status: 'Kerja', institution: 'PT. Teknologi Maju' },
 ];
 
 export const MOCK_ACHIEVEMENTS: Achievement[] = [
@@ -131,8 +123,6 @@ export const MOCK_ACHIEVEMENTS: Achievement[] = [
 
 export const MOCK_ANNOUNCEMENTS = [
   { id: '1', title: 'Ujian Akhir Semester', content: 'Jadwal UAS ganjil telah dirilis di menu Jadwal.', date: '2024-05-10', type: 'urgent' },
-  { id: '2', title: 'Pensi Sekolah', content: 'Daftarkan kelasmu untuk mengisi acara pentas seni.', date: '2024-05-12', type: 'event' },
-  { id: '3', title: 'Libur Nasional', content: 'Sekolah libur sehubungan dengan hari raya.', date: '2024-05-15', type: 'info' },
 ];
 
 export const MOCK_EXAM: Exam = {
@@ -142,7 +132,6 @@ export const MOCK_EXAM: Exam = {
   durationMinutes: 60,
   questions: [
     { id: 'q1', text: 'Berapakah hasil dari 2 + 2?', options: ['2', '3', '4', '5'], correctOptionIndex: 2 },
-    { id: 'q2', text: 'Berapakah akar dari 64?', options: ['6', '7', '8', '9'], correctOptionIndex: 2 },
   ]
 };
 
@@ -156,15 +145,5 @@ export const MOCK_BLOG_POSTS: BlogPost[] = [
     author: 'Admin',
     category: 'Environment',
     imageUrl: 'https://images.unsplash.com/photo-1542601906990-b4d3fb778b09?auto=format&fit=crop&q=80&w=1000'
-  },
-  {
-    id: 'b2',
-    title: 'Inovasi Panel Surya untuk Lab Fisika',
-    excerpt: 'Memanfaatkan energi matahari untuk kebutuhan edukasi.',
-    content: 'Pemasangan panel surya di atap laboratorium fisika...',
-    date: '2024-02-15',
-    author: 'Guru Fisika',
-    category: 'Innovation',
-    imageUrl: 'https://images.unsplash.com/photo-1509391366360-fe5bb58583bb?auto=format&fit=crop&q=80&w=1000'
   }
 ];

@@ -23,6 +23,7 @@ import AchievementManager from './pages/dashboard/AchievementManager';
 import BroadcastManager from './pages/dashboard/BroadcastManager';
 import StudentCardManagement from './pages/dashboard/StudentCardManagement';
 import SchoolProfile from './pages/dashboard/SchoolProfile';
+import ScheduleManagement from './pages/dashboard/ScheduleManagement';
 
 // Super Admin Features
 import SuperAdminDashboard from './pages/dashboard/SuperAdminDashboard';
@@ -60,6 +61,7 @@ const DashboardLayout: React.FC<{ children: React.ReactNode; role: UserRole }> =
     if (location.pathname.includes('broadcast')) return 'Communication Hub';
     if (location.pathname.includes('profile')) return 'Profil Sekolah';
     if (location.pathname.includes('card-management')) return 'Kartu Siswa';
+    if (location.pathname.includes('schedule-manage')) return 'Manajemen Jadwal';
     if (location.pathname.includes('admin')) return 'Admin Dashboard';
     if (location.pathname.includes('schools')) return 'School Management';
     if (location.pathname.includes('approval-center')) return 'Card Approval Center';
@@ -126,7 +128,7 @@ const App: React.FC = () => {
         <Route path="/dashboard/school" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={SchoolDashboard} />} />
         <Route path="/dashboard/profile" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={SchoolProfile} />} />
         <Route path="/dashboard/master-data" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={DataMaster} />} />
-        <Route path="/dashboard/schedule-manage" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={Schedule} />} />
+        <Route path="/dashboard/schedule-manage" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={ScheduleManagement} />} />
         <Route path="/dashboard/tracer-study" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={TracerStudy} />} />
         <Route path="/dashboard/achievements" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={AchievementManager} />} />
         <Route path="/dashboard/broadcast" element={<DemoWrapper role={UserRole.SCHOOL_ADMIN} component={BroadcastManager} />} />

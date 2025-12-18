@@ -62,7 +62,9 @@ export interface Student extends User {
   role: UserRole.STUDENT;
   classId: string;
   nisn: string;
-  parentPhone: string;
+  whatsapp: string;
+  parentWhatsapp: string;
+  parentPhone: string; // legacy support
   achievements?: Achievement[];
   cardStatus?: 'PENDING' | 'APPROVED' | 'PRINTED';
 }

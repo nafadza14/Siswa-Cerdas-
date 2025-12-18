@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Search, Plus, Download, Upload, Edit, Trash2 } from 'lucide-react';
+import { Search, Plus, Download, Upload, Edit, Trash2, MessageCircle } from 'lucide-react';
 import { MOCK_STUDENTS } from '../../constants';
 
 const DataMaster: React.FC = () => {
@@ -32,7 +32,7 @@ const DataMaster: React.FC = () => {
              onClick={() => setTab('siswa')} 
              className={`px-8 py-4 font-bold text-sm transition-all border-b-2 ${tab === 'siswa' ? 'border-primary text-primary bg-primary/5' : 'border-transparent text-gray-400 hover:text-dark'}`}
            >
-             Data Siswa (842)
+             Data Siswa ({MOCK_STUDENTS.length})
            </button>
            <button 
              onClick={() => setTab('guru')} 
@@ -58,21 +58,35 @@ const DataMaster: React.FC = () => {
                     <tr className="text-xs font-bold text-gray-400 uppercase tracking-wider border-b border-gray-50">
                        <th className="pb-4 px-4">Nama Lengkap</th>
                        <th className="pb-4 px-4">{tab === 'siswa' ? 'NISN' : 'NIP'}</th>
-                       <th className="pb-4 px-4">{tab === 'siswa' ? 'Kelas' : 'Mapel'}</th>
-                       <th className="pb-4 px-4">Kontak</th>
+                       <th className="pb-4 px-4">{tab === 'siswa' ? 'WA Siswa' : 'Mapel'}</th>
+                       <th className="pb-4 px-4">{tab === 'siswa' ? 'WA Ortu' : 'Kontak'}</th>
                        <th className="pb-4 px-4 text-center">Aksi</th>
                     </tr>
                  </thead>
                  <tbody className="divide-y divide-gray-50">
-                    {MOCK_STUDENTS.map(s => (
+                    {MOCK_STUDENTS.slice(0, 20).map(s => (
                       <tr key={s.id} className="group hover:bg-gray-50/50 transition">
                          <td className="py-4 px-4 flex items-center gap-3">
                             <img src={s.avatar} className="w-8 h-8 rounded-full object-cover" />
                             <span className="font-bold text-dark text-sm">{s.name}</span>
                          </td>
                          <td className="py-4 px-4 text-sm text-gray-500 font-mono">{s.nisn}</td>
-                         <td className="py-4 px-4 text-sm text-gray-500">{tab === 'siswa' ? '10 IPA 1' : 'Matematika'}</td>
-                         <td className="py-4 px-4 text-sm text-gray-500">{s.email}</td>
+                         <td className="py-4 px-4 text-sm text-gray-500">
+                            {tab === 'siswa' ? (
+                              <div className="flex items-center gap-1">
+                                 <MessageCircle size={14} className="text-green-500"/>
+                                 {s.whatsapp}
+                              </div>
+                            ) : 'Matematika'}
+                         </td>
+                         <td className="py-4 px-4 text-sm text-gray-500">
+                            {tab === 'siswa' ? (
+                              <div className="flex items-center gap-1">
+                                 <MessageCircle size={14} className="text-green-500"/>
+                                 {s.parentWhatsapp}
+                              </div>
+                            ) : s.email}
+                         </td>
                          <td className="py-4 px-4">
                             <div className="flex justify-center gap-2 opacity-0 group-hover:opacity-100 transition">
                                <button className="p-2 text-blue-500 hover:bg-blue-50 rounded-lg"><Edit size={16}/></button>
