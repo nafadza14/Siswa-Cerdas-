@@ -5,12 +5,10 @@ import { Play, CheckCircle, Shield, Smartphone, CreditCard, BarChart } from 'luc
 import { Link } from 'react-router-dom';
 
 const LandingPage: React.FC = () => {
-  // Updated to the specific Detik image requested
   const [heroImage] = useState<string>("https://awsimages.detik.net.id/community/media/visual/2025/02/04/ilustrasi-siswa-sma_169.jpeg?w=1200");
   const [currentTime, setCurrentTime] = useState(new Date());
 
   useEffect(() => {
-    // Update time every minute for the UI bubble
     const timer = setInterval(() => setCurrentTime(new Date()), 60000);
     return () => clearInterval(timer);
   }, []);
@@ -48,12 +46,11 @@ const LandingPage: React.FC = () => {
               </p>
               
               <div className="flex flex-col sm:flex-row items-center gap-4 justify-center lg:justify-start">
-                <Link to="/dashboard" className="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-teal-500 transition hover:-translate-y-1 w-full sm:w-auto">
+                <Link to="/register-school" className="px-8 py-4 bg-primary text-white font-bold rounded-xl shadow-lg hover:bg-teal-500 transition hover:-translate-y-1 w-full sm:w-auto">
                   Mulai Sekarang
                 </Link>
-                <Link to="/cards" className="px-8 py-4 bg-dark text-white font-bold rounded-xl shadow-lg hover:bg-gray-800 transition hover:-translate-y-1 flex items-center justify-center gap-2 w-full sm:w-auto">
-                   <CreditCard size={20} />
-                   Dapatkan Kartu
+                <Link to="/login" className="px-8 py-4 bg-dark text-white font-bold rounded-xl shadow-lg hover:bg-gray-800 transition hover:-translate-y-1 flex items-center justify-center gap-2 w-full sm:w-auto text-center">
+                   Akses Dashboard
                 </Link>
                 <button onClick={scrollToFeatures} className="px-8 py-4 flex items-center gap-2 text-gray-600 font-semibold hover:text-dark transition">
                   <span className="w-10 h-10 rounded-full bg-orange-100 flex items-center justify-center text-secondary">
@@ -104,7 +101,6 @@ const LandingPage: React.FC = () => {
                  </div>
               </div>
               
-              {/* Decorative elements */}
               <div className="absolute top-1/2 left-0 w-24 h-24 bg-primary/20 rounded-full blur-2xl -z-10"></div>
               <div className="absolute bottom-0 right-10 w-40 h-40 bg-secondary/20 rounded-full blur-3xl -z-10"></div>
             </div>
@@ -177,7 +173,7 @@ const LandingPage: React.FC = () => {
               <div className="p-8 rounded-3xl bg-primary text-white shadow-xl transition group flex flex-col justify-center items-center text-center">
                 <h4 className="text-2xl font-bold mb-3">Coba Gratis Sekarang</h4>
                 <p className="text-white/80 text-sm mb-6">Rasakan kemudahan mengelola sekolah dengan Siswa Cerdas.</p>
-                <Link to="/dashboard" className="px-6 py-3 bg-white text-primary font-bold rounded-xl hover:bg-gray-100 transition w-full">
+                <Link to="/register-school" className="px-6 py-3 bg-white text-primary font-bold rounded-xl hover:bg-gray-100 transition w-full">
                   Daftar Sekolah
                 </Link>
              </div>

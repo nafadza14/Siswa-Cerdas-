@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Menu, X } from 'lucide-react';
 import { Link, useLocation } from 'react-router-dom';
@@ -7,12 +8,8 @@ const Navbar: React.FC = () => {
   const location = useLocation();
 
   const handleFeatureClick = (e: React.MouseEvent) => {
-    // If we are not on home, navigate to home then scroll
     if (location.pathname !== '/') {
-      // Allow default behavior (Link to /#features) to handle it naturally 
-      // by React Router or native anchor if implemented, but here we use a helper.
-      // Since we are using HashRouter, anchors work a bit differently.
-      // We will let the user navigate to Home.
+      // Allow react-router to handle navigation
     } else {
        e.preventDefault();
        const element = document.getElementById('features');
@@ -48,8 +45,8 @@ const Navbar: React.FC = () => {
 
           {/* CTA Buttons */}
           <div className="hidden md:flex space-x-4 items-center">
-            <Link to="/dashboard" className="text-dark font-semibold hover:text-primary px-4 py-2 transition">Log in</Link>
-            <Link to="/dashboard" className="bg-secondary hover:bg-orange-500 text-white px-6 py-2.5 rounded-full font-medium transition shadow-lg shadow-orange-200">
+            <Link to="/login" className="text-dark font-semibold hover:text-primary px-4 py-2 transition">Log in</Link>
+            <Link to="/register-school" className="bg-secondary hover:bg-orange-500 text-white px-6 py-2.5 rounded-full font-medium transition shadow-lg shadow-orange-200">
               Register
             </Link>
           </div>
@@ -71,8 +68,8 @@ const Navbar: React.FC = () => {
             <Link to="/cards" className="block px-3 py-2 text-gray-600 font-medium">Kartu Siswa</Link>
             <Link to="/blog" className="block px-3 py-2 text-gray-600 font-medium">Blog</Link>
             <div className="pt-4 flex flex-col gap-3">
-               <Link to="/dashboard" className="w-full text-center text-dark font-semibold py-2">Log in</Link>
-               <Link to="/dashboard" className="w-full bg-secondary text-white py-3 rounded-xl font-medium text-center">Register</Link>
+               <Link to="/login" className="w-full text-center text-dark font-semibold py-2">Log in</Link>
+               <Link to="/register-school" className="w-full bg-secondary text-white py-3 rounded-xl font-medium text-center">Register</Link>
             </div>
           </div>
         </div>

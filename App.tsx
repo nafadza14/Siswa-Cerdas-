@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { HashRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
+import Login from './pages/auth/Login';
+import RegisterSchool from './pages/auth/RegisterSchool';
 import Sidebar from './components/Sidebar';
 import Attendance from './pages/dashboard/Attendance';
 import StudentAttendance from './pages/dashboard/StudentAttendance';
@@ -115,6 +117,8 @@ const App: React.FC = () => {
     <HashRouter>
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/register-school" element={<RegisterSchool />} />
         <Route path="/blog" element={<BlogPublic />} />
         <Route path="/blog/:id" element={<BlogDetail />} />
         <Route path="/cards" element={<CardGenerator />} />
